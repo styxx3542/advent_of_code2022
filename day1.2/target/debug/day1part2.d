@@ -1,0 +1,1 @@
+/Users/styxx/rust_projects/advent_of_code2022/day1.2/target/debug/day1part2: /Users/styxx/rust_projects/advent_of_code2022/day1.2/input.txt /Users/styxx/rust_projects/advent_of_code2022/day1.2/src/main.rs
