@@ -2,7 +2,7 @@ import os
 import requests
 import subprocess
 
-COOKIE = "53616c7465645f5fbbdfce258efd68309146d287772c4457ac621c39c9f5bd15e6afc89fb8e3dcb0013230291c4b4d645b89d4ac17fd30942bd05e8fabb59caf"
+COOKIE = "INSERT COOKIE HERE"
 
 
 def download_file(url, directory, cookie):
