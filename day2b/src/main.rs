@@ -1,5 +1,5 @@
 #[derive(PartialEq, Clone)]
-enum Moves {
+enum Move {
     Rock,
     Paper,
     Scissors,
@@ -17,7 +17,7 @@ impl Outcome {
             "X" => Outcome::Lose,
             "Y" => Outcome::Draw,
             "Z" => Outcome::Win,
-            "_" => panic!("unexpected input"),
+            _ => panic!("unexpected input"),
         }
     }
 
@@ -30,25 +30,25 @@ impl Outcome {
     }
 }
 
-impl Moves {
-    fn from_str(s: &str) -> Moves {
+impl Move {
+    fn from_str(s: &str) -> Move {
         match s {
-            "A" => Moves::Rock,
-            "B" => Moves::Paper,
-            "C" => Moves::Scissors,
+            "A" => Move::Rock,
+            "B" => Move::Paper,
+            "C" => Move::Scissors,
             _ => panic!("Unexpected input {s}"),
         }
     }
 
     fn get_score(&self) -> u32 {
         match self {
-            Moves::Rock => 1,
-            Moves::Paper => 2,
-            Moves::Scissors => 3,
+            Move::Rock => 1,
+            Move::Paper => 2,
+            Move::Scissors => 3,
         }
     }
 
-    fn get_opponent_move(&self, outcome: &Outcome) -> Move {
+    fn get_move(&self, outcome: &Outcome) -> Move {
         match outcome {
             Outcome::Draw => self.clone(),
             Outcome::Lose => match self {
@@ -57,35 +57,23 @@ impl Moves {
                 Move::Scissors => Move::Paper,
             },
             Outcome::Win => match self {
-                Move::Rock => Move::Scissors,
-                Move::Paper => Move::Rock,
-                Move::Scissors => Move::Paper,
+                Move::Rock => Move::Paper,
+                Move::Paper => Move::Scissors,
+                Move::Scissors => Move::Rock,
             },
-        }
-    }
-
-    fn calculate_score(&self, opponent: &Moves) -> u32 {
-        if self == opponent {
-            return 3 + opponent.get_score();
-        } else {
-            match (self, opponent) {
-                (Moves::Rock, Moves::Scissors)
-                | (Moves::Paper, Moves::Rock)
-                | (Moves::Scissors, Moves::Paper) => 6 + self.get_score(),
-                _ => 0 + self.get_score(),
-            }
         }
     }
 }
 fn main() {
-    let v = include_str!("../input.txt")
+    let v: u32 = include_str!("../input.txt")
         .split("\n")
         .map(|s| {
-            s.split(' ')
-                .map(|s| Moves::from_str(s))
-                .collect::<Vec<Moves>>()
+            let (a, b) = s.split_once(' ').unwrap();
+            let (opponent_move, outcome) = (Move::from_str(a), Outcome::from_str(b));
+            let my_move = opponent_move.get_move(&outcome);
+            my_move.get_score() + outcome.get_score()
         })
-        .map(|v| v[1].calculate_score(&v[0]))
         .sum();
-    println!("{}", val);
-    }
+
+    println!("{v}");
+}

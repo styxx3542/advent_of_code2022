@@ -1,51 +1,30 @@
-#[derive(PartialEq)]
-enum Moves {
+
+enum Move {
     Rock,
     Paper,
-    Scissors,
+    Scissors
 }
 
-impl Moves {
-    fn from_str(s: &str) -> Moves {
-        match s {
-            "A" | "X" => Moves::Rock,
-            "B" | "Y" => Moves::Paper,
-            "C" | "Z" => Moves::Scissors,
-            _ => panic!("Unexpected input {s}"),
-        }
-    }
-
-    fn get_score(&self) -> u32 {
-        match self {
-            Moves::Rock => 1,
-            Moves::Paper => 2,
-            Moves::Scissors => 3,
-        }
-    }
-
-    fn calculate_score(&self, opponent: &Moves) -> u32 {
-        if self == opponent {
-            return 3 + opponent.get_score();
-        } else {
-            match (self, opponent) {
-                (Moves::Rock, Moves::Scissors)
-                | (Moves::Paper, Moves::Rock)
-                | (Moves::Scissors, Moves::Paper) => 6 + self.get_score(),
-                _ => 0 + self.get_score(),
+fn determine_outcome(player1: Move,player2: Move) -> u32 {
+    match player1 {
+        Rock => {
+            match player2{
+                Rock,
+                
             }
-        }
+        },
+        Paper => ,
+        _ => 
     }
 }
-fn main() {
-    let val: u32 = include_str!("../input.txt")
-        .split("\n")
-        .map(|s| {
-            s.split(' ')
-                .map(|s| Moves::from_str(s))
-                .collect::<Vec<Moves>>()
-        })
-        .map(|v| v[1].calculate_score(&v[0]))
-        .sum();
 
-    println!("{}", val);
+fn main() {
+    let mut arr = include_str!("../input.txt")
+        .split("\n\n")
+        .map(|e| e.lines().map(|c| c.parse::<u32>().unwrap()).sum::<u32>())
+        .collect::<Vec<u32>>();
+
+    arr.sort_unstable();
+
+    println!("{}", arr.into_iter().rev().take(3).sum::<u32>())
 }
