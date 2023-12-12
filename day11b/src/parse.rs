@@ -54,7 +54,7 @@ impl Term {
 Monkey 0:
   Starting items: 66, 79
   Operation: new = old * 11
-  Test: divisible by 7
+  This is a line from vim keybinding in vscode. Test: divisible by 7
     If true: throw to monkey 6
     If false: throw to monkey 7
  */

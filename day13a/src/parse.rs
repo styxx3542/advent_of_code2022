@@ -2,13 +2,15 @@ use nom::{
     branch::alt,
     bytes::complete::tag,
     character::complete as cc,
-    combinator::map,
+    character::complete::{one_of, space0, space1},
+    combinator::{map, value},
+    error::ParseError,
     multi::{separated_list0, separated_list1},
-    sequence::tuple,
+    sequence::{preceded, tuple},
     IResult,
 };
 use std::cmp::Ordering;
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq)]
 pub enum Element {
     Integer(u32),
     List(Vec<Element>),
@@ -48,6 +50,11 @@ fn parse_element(s: &str) -> IResult<&str, Element> {
     ))(s)
 }
 
-pub fn parse_input(s: &str) -> IResult<&str, Vec<Vec<Element>>> {
-    separated_list1(cc::multispace1, parse_list)(s)
+fn parse_packet(s: &str) -> IResult<&str, (Vec<Element>, Vec<Element>)> {
+    let (s, l) = parse_list(s)?;
+    let (s, r) = preceded(tag("\n"), parse_list)(s)?;
+    Ok((s, (l, r)))
+}
+pub fn parse_input(s: &str) -> IResult<&str, Vec<(Vec<Element>, Vec<Element>)>> {
+    separated_list1(cc::multispace1, parse_packet)(s)
 }
